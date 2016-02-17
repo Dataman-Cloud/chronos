@@ -3,17 +3,21 @@ FROM ubuntu:14.04
 RUN echo "deb http://repos.mesosphere.io/ubuntu/ trusty main" > /etc/apt/sources.list.d/mesosphere.list && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E56151BF && \
     apt-get update && \
-    apt-get install -y \
+    apt-get install -y maven \
+    node \
+    npm \
     default-jdk \
     mesos \
+    scala \
     curl && \
     apt-get clean all
 
-ADD ./target /chronos
-ADD dataman_chronos.sh /
-RUN chmod 777 /dataman_chronos.sh
+ADD . /chronos
+
 WORKDIR /chronos
 
-ENTRYPOINT ["/dataman_chronos.sh"]
+RUN mvn clean package
 
+EXPOSE 8080
 
+ENTRYPOINT ["bin/start-chronos.bash"]

@@ -1,0 +1,11 @@
+FROM 10.3.10.33:5000/centos7/mesos-0.23.0-base:20160202112409 
+
+RUN yum install -y java
+ADD . /chronos
+
+WORKDIR /chronos
+
+EXPOSE 8080
+
+ENTRYPOINT ["dataman_chronos.sh"]
+
